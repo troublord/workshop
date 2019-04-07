@@ -8,6 +8,11 @@ var bookCategoryList = [
     { text: "家庭保健", value: "home", src: "image/home.jpg" },
     { text: "語言", value: "language", src: "image/language.jpg" }
 ];
+function DynamicImage(src) {//更改圖片
+    document.getElementById("book-image").src = src;
+    console.log(src);
+
+}
 
 
 // 載入書籍資料
@@ -19,6 +24,34 @@ function loadBookData() {
         
     }
 }
+function pushBookData() {
+    
+    console.log(document.getElementById('book_name').value);
+    console.log(document.getElementById('book_author').value);
+    console.log(document.getElementById('bought_datepicker').value);
+    console.log(document.getElementById('delivered_datepicker').value);
+    console.log(document.getElementById('book_price').value);
+    console.log(document.getElementById('book_amount').value);
+    console.log(document.getElementById("book_total").textContent);
+    console.log(document.getElementById("book_total").textContent);
+    var myselect = document.getElementById("book_category");
+    console.log(myselect.options[myselect.selectedIndex].text);
+    bookDataFromLocalStorage.push({
+        "BookId": bookDataFromLocalStorage.length,
+        "BookCategory": myselect.options[myselect.selectedIndex].text,
+        "BookName": document.getElementById('book_name').value,
+        "BookAuthor": document.getElementById('book_author').value,
+        "BookBoughtDate": document.getElementById('bought_datepicker').value,
+        "BookDeliveredDate": document.getElementById('delivered_datepicker').value,
+        "BookPrice": document.getElementById('book_price').value,
+        "BookAmount": document.getElementById('book_amount').value,
+        "BookTotal": document.getElementById("book_total").textContent
+    });
+   
+   
+}
+
+
 //把英文書本種類改成中文
 function ChangeCategory() {
     for (var i in bookDataFromLocalStorage) {
@@ -69,7 +102,8 @@ $(function () {
     loadBookData();
     ChangeCategory();
     AddThousand();
-    AddFontawesome()
+    AddFontawesome();
+    DynamicImage();
 });
 var a;
     $(document).ready(function () {
@@ -116,9 +150,9 @@ var a;
                 {
                     field: "BookDeliveredDate", title: "送達狀態", width: "70px", template: function (dataItem) {
                         var a = kendo.htmlEncode(dataItem.BookDeliveredDate);
-                        console.log(a);
+                        
                         if (typeof a != 'undefined') {//如果友值加入fontawesome
-                            console.log(typeof kendo.htmlEncode(dataItem.BookDeliveredDate));
+                         
                             return '<i class="fas fa-address-book" title=' + kendo.htmlEncode(dataItem.BookDeliveredDate) + '></i>';
                         } //如果沒有就用另一張fontawesome
                         else { return '<i class="fas fa-ad"></i>" title=' + kendo.htmlEncode(dataItem.BookDeliveredDate) + '></i>'; }
@@ -129,7 +163,7 @@ var a;
 
             ]
         });
-        function deleteItem(e) { //刪除
+        function deleteItem(e) { //刪除row
             e.preventDefault();
 
             var grid = $("#book_grid").data("kendoGrid");
@@ -141,12 +175,57 @@ var a;
 
         }
 
-        function AddDelete() {
-            for (var i in bookDataFromLocalStorage) {
-                bookDataFromLocalStorage[i].BookPrice = FormatNumber(bookDataFromLocalStorage[i].BookPrice);
-                
-            }
-        }
+       
+        $(".fieldlist").kendoWindow({
+            width: "500px",
+            visible: false,
+            modal: true,
+            title: "新增書",
+            actions: [
+                "Pin",
+                "Minimize",
+                "Maximize",
+                "Close"
+            ],
+
+        });
+        $("#add_book").click(function () {
+
+            $(".fieldlist").data("kendoWindow").open().center();
+
+        });
+        $("#bought_datepicker").kendoDatePicker({
+            format: "yyyy-MM-dd",
+            value: new Date(),
+            max: new Date(),
+            min: new Date(1990, 10, 10),
+            culture: "zh.TW"   //顯示culture檔的kendo not defined
+           
+        });
+        $("#delivered_datepicker").kendoDatePicker({
+            format: "yyyy-MM-dd",
+            min: new Date(),
+            max: new Date(2019,10,10),
+            culture: "zh.TW" 
+        });
+        $("#book_price").kendoNumericTextBox({
+            value: 0,
+            min: 0,
+            max: 5000,
+            step: 10,
+            format: "c0",
+            decimals: 0
+        });
+        $("#book_amount").kendoNumericTextBox({
+            value: 0,
+            min: 0,
+            max: 100,
+            step: 1,
+            decimals: 0
+        });
+        console.log(document.getElementById("book_amount").value);
+       
+
 
 });
 
@@ -165,6 +244,15 @@ function getBoolean(str) {
         return null;
     }
 }
+function total() {
+    $("#book_amout").val;
+    var amout = document.getElementById("book_amount").value;
+    var price = document.getElementById("book_price").value;
+    var totle = amout * price;
+    document.getElementById("book_total").textContent = totle;
+
+}
+
 
     $('#filter').on('input', function (e) {//req
         var grid = $('#book_grid').data('kendoGrid');

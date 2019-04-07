@@ -25,18 +25,67 @@
         <div class="uk-container align-center">
             <div class="uk-card uk-text-left uk-width-1-3">
                 <form id="book_form">
-                    <ul class="fieldlist"></ul>
+                    <div id="insert_window">
+                        <ul class="fieldlist">
+                            <li>
+                                <img id="book-image" src="image/database.jpg" alt="">
+                            </li>
+                            <li>
+                                <label class="required">圖書類別</label>
+                                <select id="book_category" onchange="DynamicImage(this.options[this.selectedIndex].value)">
+                                    <option value="image/database.jpg">資料庫</option>
+                                    <option value="image/internet.jpg" selected="selected">網際網路</option>
+                                    <option value="image/system.jpg">應用系統整合</option>
+                                    <option value="image/home.jpg">家庭保健</option>
+                                    <option value="image/language.jpg">語言學習</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label class="required">書名</label>
+                                <input id="book_name" type="text" />
+                            </li>
+                            <li>
+                                <label class="required">作者</label>
+                                <input id="book_author" type="text" />
+                            </li>
+                            <li>
+                                <label class="required">購買日期</label>
+                                <input id="bought_datepicker" style="width: 100%" />
+                            </li>
+                            <li>
+                                <label>送達日期</label>
+                                <input id="delivered_datepicker" style="width: 100%" />
+                            </li>
+                            <li>
+                                <label class="required">金額</label>
+                                <input id="book_price" type="number"  onchange="total()" style="text-align:right;" />
+                            </li>
+                            <li>
+                                <label class="required">數量</label>
+                                <input id="book_amount" type="number" onchange="total()" style="text-align:right;"/>
+                            </li>
+                            <li>
+                                <span>
+                                    總計&nbsp;<span id="book_total">0</span> 元
+                                </span>
+                            </li>
+                            <li class="uk-text-right">
+                                <button type="button" class="k-button k-primary btn-add-book" id="save_book" onclick="pushBookData()">新增</button>
+                            </li>
+                        </ul>
+                    </div>
                 </form>
             </div>
             <button type="button" id="add_book" class="k-button k-primary btn-add-book">新增書籍</button>
             <input id='filter' class='k-textbox' />
             <div id="book_grid">
-                
+
             </div>
             <div id="details"></div>
         </div>
     </main>
     <footer></footer>
+    <script src="./js/kendo.culture.zh-TW.min.js"></script>
     <script type="text/javascript" src="data/book-data.js"></script>
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/kendo.all.min.js"></script>
