@@ -54,12 +54,12 @@ function AddThousand() {
     }
 }
 var a="";
-function AddFontawesome() {
-    for (var i in bookDataFromLocalStorage) {
-        if (bookDataFromLocalStorage[i].BookDeliveredDate != "") {
-             a = "fas fa-couch";
-        }
+function AddFontawesome(a) {
+    
+    if (a != "") {
+        a = "fas fa-couch";
     }
+    
 }
 
 
@@ -71,7 +71,7 @@ $(function () {
     AddThousand();
     AddFontawesome()
 });
-
+var a;
     $(document).ready(function () {
         $("#book_grid").kendoGrid({
             dataSource: {
@@ -97,27 +97,60 @@ $(function () {
             width: 600,
             scrollable: true,
             sortable: true,
-            filterable: true,
-            editable: true,
             pageable: {
-                input: true,
-                numeric: false
+                input:  true,
+                messages: {
+                    display: "顯示項目 {0}-{1} 總共 {2} 項",
+                    page: "頁",
+                    of: "共 {0}"
+                }
             },
+            
             columns: [
-                { command: [{ className: "btn-destroy", name: "destroy", text: "刪除" }], width: "60px" },
+                { command: { text: "刪除", click: deleteItem }, width: "70px" },
                 { field: "BookId", title: "ID", width: "60px" },
-                { field: "BookName", title: "書名", width: "210px" },
+                { field: "BookName", title: "書名", width: "210px"},
                 { field: "BookCategory", title: "種類", width: "80px" },
                 { field: "BookAuthor", title: "作者", width: "100px" },
                 { field: "BookBoughtDate", title: "購買日期", width: "90px" },
-                { field: "BookDeliveredDate", title: "送達狀態", width: "70px"},
+                {
+                    field: "BookDeliveredDate", title: "送達狀態", width: "70px", template: function (dataItem) {
+                        var a = kendo.htmlEncode(dataItem.BookDeliveredDate);
+                        console.log(a);
+                        if (typeof a != 'undefined') {//如果友值加入fontawesome
+                            console.log(typeof kendo.htmlEncode(dataItem.BookDeliveredDate));
+                            return '<i class="fas fa-address-book" title=' + kendo.htmlEncode(dataItem.BookDeliveredDate) + '></i>';
+                        } //如果沒有就用另一張fontawesome
+                        else { return '<i class="fas fa-ad"></i>" title=' + kendo.htmlEncode(dataItem.BookDeliveredDate) + '></i>'; }
+                    }},
                 { field: "BookPrice", title: "金額", width: "70px" },
                 { field: "BookAmount", title: "數量", width: "70px" },
-                { field: "BookTotal", title: "總計", width: "70px"},
+                { field: "BookTotal", title: "總計", width: "80px"},
 
             ]
         });
+        function deleteItem(e) { //刪除
+            e.preventDefault();
+
+            var grid = $("#book_grid").data("kendoGrid");
+            var row = $(e.currentTarget).closest("tr");
+            var dataItem = this.dataItem(row);
+            alert("確定刪掉: " + dataItem.BookName);
+            grid.removeRow(row);
+            
+
+        }
+
+        function AddDelete() {
+            for (var i in bookDataFromLocalStorage) {
+                bookDataFromLocalStorage[i].BookPrice = FormatNumber(bookDataFromLocalStorage[i].BookPrice);
+                
+            }
+        }
+
 });
+
+
 //這裡是搜尋text box
 function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
