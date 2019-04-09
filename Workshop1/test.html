@@ -28,11 +28,11 @@
                     <div id="insert_window">
                         <ul class="fieldlist">
                             <li>
-                                <img id="book-image" src="image/database.jpg" alt="">
+                                <img id="book-image" src="image/internet.jpg" alt="">
                             </li>
                             <li>
                                 <label class="required">圖書類別</label>
-                                <select id="book_category" onchange="DynamicImage(this.options[this.selectedIndex].value)">
+                                <select id="book_category" onchange="DynamicImage(this.options[this.selectedIndex].value)" >
                                     <option value="image/database.jpg">資料庫</option>
                                     <option value="image/internet.jpg" selected="selected">網際網路</option>
                                     <option value="image/system.jpg">應用系統整合</option>
@@ -42,7 +42,7 @@
                             </li>
                             <li>
                                 <label class="required">書名</label>
-                                <input id="book_name" type="text" />
+                                <input id="book_name" type="text" required validationMessage="please enter bookname" />
                             </li>
                             <li>
                                 <label class="required">作者</label>
